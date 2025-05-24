@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 if [[ "$OSTYPE" == "msys" ]]; then
-  PLUGIN_PATH="../protoc-gen-ts_proto.bat"
+  PLUGIN_PATH="../protoc-gen-kobalt_ts_proto.bat"
 else
-  PLUGIN_PATH="../protoc-gen-ts_proto"
+  PLUGIN_PATH="../protoc-gen-kobalt_ts_proto"
 fi
 
 if [[ $# -eq 0 ]]; then
@@ -26,8 +26,8 @@ for TEST in $TESTS; do
   PROTO_FILES=$(find . -name '*.proto' -type f)
   NODE_OPTIONS="--import tsx" protoc --experimental_allow_proto3_optional \
     "--plugin=$PLUGIN_PATH" \
-    --ts_proto_opt="annotateFilesWithVersion=false,${PARAMETERS}" \
-    --ts_proto_out=./ \
+    --kobalt_ts_proto_opt="annotateFilesWithVersion=false,${PARAMETERS}" \
+    --kobalt_ts_proto_out=./ \
     $PROTO_FILES
 
   echo ""

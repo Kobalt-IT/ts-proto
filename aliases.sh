@@ -26,5 +26,5 @@ function ts-protoc {
     echo "Run 'yarn build' first"
     return 1
   fi
-  protoc --plugin=$PROJECT_ROOT_DOCKER/protoc-gen-ts_proto "$@";
+  protoc --plugin=$PROJECT_ROOT_DOCKER/protoc-gen-kobalt_ts_proto "$@";
 }

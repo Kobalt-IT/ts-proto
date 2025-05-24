@@ -1175,7 +1175,10 @@ function generateInterfaceDeclaration(
     const info = sourceInfo.lookup(Fields.message.field, index);
     maybeAddComment(options, info, chunks, fieldDesc.options?.deprecated);
     const fieldKey = safeAccessor(getFieldName(fieldDesc, options));
-    const isOptional = isOptionalProperty(fieldDesc, messageDesc.options, options, currentFile.isProto3Syntax);
+    let isOptional = isOptionalProperty(fieldDesc, messageDesc.options, options, currentFile.isProto3Syntax);
+    if(fieldDesc.proto3Optional && options.useNullAsProto3Optional) {
+      isOptional = false;
+    }
     const type = toTypeName(ctx, messageDesc, fieldDesc, isOptional);
     chunks.push(code`${maybeReadonly(options)}${fieldKey}${isOptional ? "?" : ""}: ${type}, `);
   });
@@ -1261,7 +1264,7 @@ function generateBaseInstanceFactory(
     }
 
     const fieldKey = safeAccessor(getFieldName(field, options));
-    const val = isWithinOneOf(field)
+    const val = isWithinOneOf(field) && !(options.useNullAsProto3Optional && field.proto3Optional)
       ? nullOrUndefined(options)
       : isMapType(ctx, messageDesc, field)
       ? shouldGenerateJSMapType(ctx, messageDesc, field)
@@ -1859,11 +1862,19 @@ function generateEncode(ctx: Context, fullName: string, messageDesc: DescriptorP
       }
     } else if (isWithinOneOf(field)) {
       // Oneofs don't have a default value check b/c they need to denote which-oneof presence
-      chunks.push(code`
-        if (${messageProperty} !== undefined ${withAndMaybeCheckIsNotNull(options, messageProperty)}) {
-          ${writeSnippet(`${messageProperty}`)};
-        }
-      `);
+      if(field.proto3Optional && options.useNullAsProto3Optional) { 
+        chunks.push(code`
+          if (${messageProperty} !== null) {
+            ${writeSnippet(`${messageProperty}`)};
+          }
+        `);
+      } else {
+        chunks.push(code`
+          if (${messageProperty} !== undefined ${withAndMaybeCheckIsNotNull(options, messageProperty)}) {
+            ${writeSnippet(`${messageProperty}`)};
+          }
+        `);
+      }
     } else if (isMessage(field)) {
       chunks.push(code`
         if (${messageProperty} !== undefined ${withAndMaybeCheckIsNotNull(options, messageProperty)}) {

@@ -1,6 +1,6 @@
 {
   "name": "@kobalt-it/ts-proto",
-  "version": "2.7.0",
+  "version": "2.7.0-patch.1",
   "description": "",
   "main": "build/src/plugin.js",
   "repository": "github:kobalt-it/ts-proto",

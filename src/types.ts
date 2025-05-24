@@ -218,6 +218,10 @@ export function defaultValue(ctx: Context, field: FieldDescriptorProto): any {
     return options.useNullAsOptional ? null : undefined;
   }
 
+  if(field.proto3Optional && options.useNullAsProto3Optional) {
+    return null;
+  }
+
   const useDefaultValue = !currentFile.isProto3Syntax && !options.disableProto2DefaultValues && field.defaultValue;
   const numericDefaultVal = useDefaultValue ? field.defaultValue : 0;
   switch (field.type) {
@@ -692,7 +696,10 @@ export function toTypeName(
   ensureOptional = false,
 ): Code {
   function finalize(type: Code, isOptional: boolean) {
-    if (isOptional) {
+    if(isOptional && !ensureOptional && field.proto3Optional && ctx.options.useNullAsProto3Optional) {
+      return code`${type} | null`;
+    }
+    if (isOptional && !(ctx.options.noExplicitUndefined && ensureOptional)) {
       return code`${type} | ${nullOrUndefined(ctx.options, field.proto3Optional)}`;
     }
     return type;

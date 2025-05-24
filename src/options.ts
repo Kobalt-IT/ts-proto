@@ -120,6 +120,9 @@ export type Options = {
   typePrefix: string;
   typeSuffix: string;
   useDuration: DurationOption;
+
+  noExplicitUndefined: boolean;
+  useNullAsProto3Optional: boolean;
 };
 
 export function defaultOptions(): Options {
@@ -193,6 +196,9 @@ export function defaultOptions(): Options {
     typePrefix: "",
     typeSuffix: "",
     useDuration: DurationOption.DURATION,
+
+    noExplicitUndefined: false,
+    useNullAsProto3Optional: false,
   };
 }
 
@@ -294,7 +300,7 @@ export function optionsFromParameter(parameter: string | undefined): Options {
     }
   }
 
-  if (options.nestJs) {
+  if (options.nestJs && !options.useNullAsProto3Optional) {
     options.initializeFieldsAsUndefined = false;
   }
 

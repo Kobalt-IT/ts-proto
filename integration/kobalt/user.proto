@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package kobalt;
+
+message User {
+    uint32 id = 1;
+    string firstName = 2;
+    optional string middleName = 3;
+    optional string lastName = 4;
+    string code = 5;
+    repeated Contact contacts = 6;
+
+    message Contact {
+        Type type = 1;
+        string value = 2;
+        bool primary = 3;
+
+        enum Type {
+            EMAIL = 0;
+            PHONE = 1;
+        }
+    }
+}
+
+service UserService {
+    rpc UserInit (UserInitRequest) returns (UserInitResponse) {}
+}
+
+message UserInitRequest {
+    string id = 1;
+    string username = 2;
+    optional string email = 3;
+}
+
+message UserInitResponse {
+    optional User user = 1;
+}
