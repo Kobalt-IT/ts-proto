@@ -1,11 +1,11 @@
 {
-  "name": "ts-proto",
+  "name": "@kobalt-it/ts-proto",
   "version": "2.7.0",
   "description": "",
   "main": "build/src/plugin.js",
-  "repository": "github:stephenh/ts-proto",
+  "repository": "github:kobalt-it/ts-proto",
   "bin": {
-    "protoc-gen-ts_proto": "./protoc-gen-ts_proto"
+    "protoc-gen-kobalt_ts_proto": "./protoc-gen-kobalt_ts_proto"
   },
   "types": "build/index.d.ts",
   "scripts": {
