@@ -107,7 +107,7 @@ export function generateUnwrapDeep(ctx: Context, fullProtoTypeName: string, fiel
         const object: { [key: string]: any } = {};
         if (message.fields) {
           for (const key of message.fields.keys()) {
-            object[key] = Value.unwrap(message.fields.get(key));
+            object[key] = ${wrapTypeName(ctx.options, "Value")}.unwrap(message.fields.get(key));
           }
         }
         return object;
@@ -117,7 +117,7 @@ export function generateUnwrapDeep(ctx: Context, fullProtoTypeName: string, fiel
         const object: { [key: string]: any } = {};
         if (message.fields) {
           for (const key of Object.keys(message.fields)) {
-            object[key] = Value.unwrap(message.fields[key]);
+            object[key] = ${wrapTypeName(ctx.options, "Value")}.unwrap(message.fields[key]);
           }
         }
         return object;

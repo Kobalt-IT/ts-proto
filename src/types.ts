@@ -117,7 +117,7 @@ export function basicTypeName(
     case FieldDescriptorProto_Type.TYPE_MESSAGE:
     case FieldDescriptorProto_Type.TYPE_GROUP:
     case FieldDescriptorProto_Type.TYPE_ENUM:
-      return messageToTypeName(ctx, field.typeName, { ...typeOptions, repeated: isRepeated(field) });
+      return messageToTypeName(ctx, field.typeName, { ...typeOptions, repeated: isRepeated(field), proto3Optional: field.proto3Optional });
     default:
       return code`${field.typeName}`;
   }
@@ -645,7 +645,7 @@ function jsTypeName(field: FieldDescriptorProto): Code | undefined {
 export function messageToTypeName(
   ctx: Context,
   protoType: string,
-  typeOptions: { keepValueType?: boolean; repeated?: boolean } = {},
+  typeOptions: { keepValueType?: boolean; repeated?: boolean, proto3Optional?: boolean } = {},
 ): Code {
   const { options, typeMap } = ctx;
   // Watch for the wrapper types `.google.protobuf.*Value`. If we're mapping
@@ -656,6 +656,9 @@ export function messageToTypeName(
   if (!typeOptions.keepValueType && valueType) {
     if (typeOptions.repeated ?? false) {
       return valueType;
+    }
+    if((typeOptions.proto3Optional ?? false) && options.useNullAsProto3Optional) {
+      return code`${valueType} | null`;
     }
     return code`${valueType} | ${nullOrUndefined(options)}`;
   }

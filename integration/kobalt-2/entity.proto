@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package kobalt2;
+
+import "google/protobuf/struct.proto";
+
+service EntityService {
+  rpc FindOneById (FindOneByIdRequest) returns (FindOneByIdResponse) {}
+  rpc FindByIds (FindByIdsRequest) returns (FindByIdsResponse) {}
+}
+
+message FindOneByIdRequest {
+  int32 id = 1;
+}
+
+message FindOneByIdResponse {
+  optional google.protobuf.Struct entity = 1;
+}
+
+message FindByIdsRequest {
+  repeated int32 ids = 1;
+}
+
+message FindByIdsResponse {
+  repeated google.protobuf.Struct entities = 1;
+}

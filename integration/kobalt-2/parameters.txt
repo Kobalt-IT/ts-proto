@@ -1,0 +1,1 @@
+addGrpcMetadata=true,useDate=true,outputServices=grpc-js,outputClientImpl=false,nestJs=true,oneof=unions-value,useSnakeTypeName=false,typePrefix=Grpc,noExplicitUndefined=true,useNullAsProto3Optional=true
