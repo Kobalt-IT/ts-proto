@@ -372,7 +372,7 @@ export const GrpcListValue: MessageFns<GrpcListValue> & ListValueWrapperFns = {
 
   unwrap(message: GrpcListValue): Array<any> {
     if (message?.hasOwnProperty("values") && globalThis.Array.isArray(message.values)) {
-      return message.values.map(Value.unwrap);
+      return message.values.map(GrpcValue.unwrap);
     } else {
       return message as any;
     }

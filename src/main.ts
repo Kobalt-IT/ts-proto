@@ -1176,7 +1176,7 @@ function generateInterfaceDeclaration(
     maybeAddComment(options, info, chunks, fieldDesc.options?.deprecated);
     const fieldKey = safeAccessor(getFieldName(fieldDesc, options));
     let isOptional = isOptionalProperty(fieldDesc, messageDesc.options, options, currentFile.isProto3Syntax);
-    if(fieldDesc.proto3Optional && options.useNullAsProto3Optional) {
+    if (fieldDesc.proto3Optional && options.useNullAsProto3Optional) {
       isOptional = false;
     }
     const type = toTypeName(ctx, messageDesc, fieldDesc, isOptional);
@@ -1264,15 +1264,16 @@ function generateBaseInstanceFactory(
     }
 
     const fieldKey = safeAccessor(getFieldName(field, options));
-    const val = isWithinOneOf(field) && !(options.useNullAsProto3Optional && field.proto3Optional)
-      ? nullOrUndefined(options)
-      : isMapType(ctx, messageDesc, field)
-      ? shouldGenerateJSMapType(ctx, messageDesc, field)
-        ? "new Map()"
-        : "{}"
-      : isRepeated(field)
-      ? "[]"
-      : defaultValue(ctx, field);
+    const val =
+      isWithinOneOf(field) && !(options.useNullAsProto3Optional && field.proto3Optional)
+        ? nullOrUndefined(options)
+        : isMapType(ctx, messageDesc, field)
+        ? shouldGenerateJSMapType(ctx, messageDesc, field)
+          ? "new Map()"
+          : "{}"
+        : isRepeated(field)
+        ? "[]"
+        : defaultValue(ctx, field);
 
     fields.push(code`${fieldKey}: ${val}`);
   }
@@ -1862,7 +1863,7 @@ function generateEncode(ctx: Context, fullName: string, messageDesc: DescriptorP
       }
     } else if (isWithinOneOf(field)) {
       // Oneofs don't have a default value check b/c they need to denote which-oneof presence
-      if(field.proto3Optional && options.useNullAsProto3Optional) { 
+      if (field.proto3Optional && options.useNullAsProto3Optional) {
         chunks.push(code`
           if (${messageProperty} !== null) {
             ${writeSnippet(`${messageProperty}`)};

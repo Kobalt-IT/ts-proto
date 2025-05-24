@@ -156,7 +156,7 @@ export function generateUnwrapDeep(ctx: Context, fullProtoTypeName: string, fiel
       ctx.options.useReadonlyTypes ? "any" : wrapTypeName(ctx.options, "ListValue")
     }): Array<any> {
       if (message?.hasOwnProperty('values') && ${ctx.utils.globalThis}.Array.isArray(message.values)) {
-        return message.values.map(Value.unwrap);
+        return message.values.map(${wrapTypeName(ctx.options, "Value")}.unwrap);
       } else {
         return message as any;
       }
